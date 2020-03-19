@@ -1,0 +1,12 @@
+{
+  "name": "corona_simulation",
+  "version": "1.0.0",
+  "main": "start.ts",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html --open"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
+}
