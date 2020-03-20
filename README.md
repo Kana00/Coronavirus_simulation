@@ -6,11 +6,11 @@
 
 Simulation of coronavirus covid-19
 
-People in:
-- White: are normal
-- Red: are infected with the strain
-- Green: are immune after 1 day of simulation
-- Violet: died after fighting the strain.
+People in :
+- `White` are normal
+- `Red` are infected with the strain
+- `Green` are immune after 1 day of simulation
+- `Violet` died after fighting the strain.
 
 The graph below shows the progress of the pandemic in competition with
 the advancement of population immunity.
