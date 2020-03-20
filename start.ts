@@ -38,18 +38,18 @@ function createPeople(numberOfPeople:number) {
   // random infected
   const randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
   peopleArray[randomSelected].changeInfectionState('infected');
+  peopleArray[randomSelected].isFirst();
 }
 
 app.stage.addChild(graphics);
 createPeople(10);
 
 app.ticker.add((delta) => {
-  graphics.clear();
   peopleArray.forEach((element) => {
+    element.clear();
     element.update(delta);
     element.draw();
   });
-
 });
 
 // ------------------------------------------------------------------------------- EVENTs
@@ -63,7 +63,9 @@ confinementTrackBar.addEventListener('input', (event) => {
 });
 
 peopleTrackBar.addEventListener('change', (event) => {
-  graphics.clear();
+  peopleArray.forEach(element => {
+    element.clear();
+  });
   createPeople(parseInt(peopleTrackBar.value));
   peopleArray.forEach((particule) => {
     particule.setConfinementRatio(parseInt(confinementTrackBar.value));

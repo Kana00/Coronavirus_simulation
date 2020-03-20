@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js';
+
 type stateInfection = 'normal' | 'infected' | 'immunised';
 
 export default class Person {
@@ -7,9 +9,11 @@ export default class Person {
   immunisedColor = 0x31CC06;
   speed=1;
   directionAngle = 0;
+  first=false;
+  graphics = new PIXI.Graphics();
 
   constructor(
-    private graphics: PIXI.Graphics,
+    private container: PIXI.Container,
     private state: stateInfection = 'normal',
     private x = 0,
     private y = 0,
@@ -17,6 +21,7 @@ export default class Person {
     private maxHight=50) {
       this.changeInfectionState(state);
       this.directionAngle = Math.random() * 360;
+      this.container.addChild(this.graphics);
   }
 
   changeInfectionState(state: stateInfection) {
@@ -65,6 +70,14 @@ export default class Person {
     }
   }
 
+  isFirst() {
+    this.first = true;
+  }
+
+  clear() {
+    this.graphics.clear();
+  }
+
   draw() {
     // poeple
     this.graphics.lineStyle(0)
@@ -77,5 +90,11 @@ export default class Person {
     .beginFill(0x000000, 0)
     .drawCircle(this.x, this.y, 12)
     .endFill();
+
+    // if(this.first) {
+    //   const basicText = new PIXI.Text('FIRST');
+    //   basicText.x = this.x;
+    //   basicText.y = this.y;
+    // }
   }
 }
