@@ -26,7 +26,7 @@ document.body.appendChild(app.view);
 const graphics = new PIXI.Graphics();
 
 
-let peopleArray = new Array();
+let peopleArray: Array<Person> = new Array();
 const widthFrame = app.renderer.width;
 const heightFrame = app.renderer.height;
 function createPeople(numberOfPeople:number) {
@@ -37,8 +37,7 @@ function createPeople(numberOfPeople:number) {
 
   // random infected
   const randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
-  console.log(randomSelected);
-  peopleArray[Math.floor(Math.random()*(peopleArray.length-1))].changeInfectionState('infected');
+  peopleArray[randomSelected].changeInfectionState('infected');
 }
 
 app.stage.addChild(graphics);

@@ -20,7 +20,7 @@ export default class Person {
   }
 
   changeInfectionState(state: stateInfection) {
-    switch (this.state) {
+    switch (state) {
       case 'normal':
         this.currentColorOfTheTarget = this.normalColor;
         break;
@@ -51,10 +51,10 @@ export default class Person {
     this.y = this.y + increment * yDirection;
 
     // detection touching frame
-    const left = this.x < 0 && this.y > 0;
-    const right = this.x > this.maxWidth && this.y > 0;
-    const top = this.x > 0 && this.y < 0;
-    const bottom = this.x > 0 && this.y > this.maxHight;
+    const left = this.x <= 0 && this.y >= 0;
+    const right = this.x >= this.maxWidth && this.y >= 0;
+    const top = this.x >= 0 && this.y <= 0;
+    const bottom = this.x >= 0 && this.y >= this.maxHight;
 
     if(left || right) {
       this.directionAngle = 180 - this.directionAngle;
