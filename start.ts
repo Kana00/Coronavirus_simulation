@@ -26,14 +26,19 @@ document.body.appendChild(app.view);
 const graphics = new PIXI.Graphics();
 
 
-let pointArray = new Array();
+let peopleArray = new Array();
 const widthFrame = app.renderer.width;
 const heightFrame = app.renderer.height;
 function createPeople(numberOfPeople:number) {
-  pointArray = new Array();
+  peopleArray = new Array();
   for (let i = 0; i < numberOfPeople; i++) {
-    pointArray.push(new Person(graphics, 'normal', Math.random() * widthFrame, Math.random() * heightFrame, widthFrame, heightFrame));
+    peopleArray.push(new Person(graphics, 'normal', Math.random() * widthFrame, Math.random() * heightFrame, widthFrame, heightFrame));
   }
+
+  // random infected
+  const randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
+  console.log(randomSelected);
+  peopleArray[Math.floor(Math.random()*(peopleArray.length-1))].changeInfectionState('infected');
 }
 
 app.stage.addChild(graphics);
@@ -41,7 +46,7 @@ createPeople(10);
 
 app.ticker.add((delta) => {
   graphics.clear();
-  pointArray.forEach((element) => {
+  peopleArray.forEach((element) => {
     element.update(delta);
     element.draw();
   });
@@ -61,13 +66,13 @@ confinementTrackBar.addEventListener('input', (event) => {
 peopleTrackBar.addEventListener('change', (event) => {
   graphics.clear();
   createPeople(parseInt(peopleTrackBar.value));
-  pointArray.forEach((particule) => {
+  peopleArray.forEach((particule) => {
     particule.setConfinementRatio(parseInt(confinementTrackBar.value));
   });
 });
 
 confinementTrackBar.addEventListener('change', (event) => {
-  pointArray.forEach((particule) => {
+  peopleArray.forEach((particule) => {
     particule.setConfinementRatio(parseInt(confinementTrackBar.value));
   });
 });
