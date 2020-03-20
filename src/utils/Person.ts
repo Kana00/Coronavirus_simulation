@@ -7,19 +7,22 @@ export default class Person {
   normalColor = 0xFFFFFF;
   infectedColor = 0xFF0606;
   immunisedColor = 0x31CC06;
-  speed = 10;
+  speed = 1;
+  infectionRayon = 12;
   directionAngle = 0;
   isShowText = false;
   graphics = new PIXI.Graphics();
   text = new PIXI.Text('FIRST');
+  container: PIXI.Container;
 
   constructor(
-    private container: PIXI.Container,
+    private app: PIXI.Application,
     private state: stateInfection = 'normal',
     private x = 0,
-    private y = 0,
-    private maxWidth = 50,
-    private maxHight = 50) {
+    private y = 0) {
+    this.container = this.app.stage;
+    this.x = Math.random() * this.app.renderer.width;
+    this.y = Math.random() * this.app.renderer.height;
     this.changeInfectionState(state);
     this.directionAngle = Math.random() * 360;
     this.container.addChild(this.graphics);
@@ -28,12 +31,15 @@ export default class Person {
   changeInfectionState(state: stateInfection) {
     switch (state) {
       case 'normal':
+        this.state = 'normal';
         this.currentColorOfTheTarget = this.normalColor;
         break;
       case 'infected':
+        this.state = 'infected';
         this.currentColorOfTheTarget = this.infectedColor;
         break;
       case 'immunised':
+        this.state = 'immunised';
         this.currentColorOfTheTarget = this.immunisedColor;
         break;
       default:
@@ -58,9 +64,9 @@ export default class Person {
 
     // detection touching frame
     const left = this.x <= 0 && this.y >= 0;
-    const right = this.x >= this.maxWidth && this.y >= 0;
+    const right = this.x >= this.app.renderer.width && this.y >= 0;
     const top = this.x >= 0 && this.y <= 0;
-    const bottom = this.x >= 0 && this.y >= this.maxHight;
+    const bottom = this.x >= 0 && this.y >= this.app.renderer.height;
 
     if (left || right) {
       this.directionAngle = 180 - this.directionAngle;
@@ -94,8 +100,22 @@ export default class Person {
     this.text.text = name;
   }
 
-  testCollisionWith(child: PIXI.Graphics) {
+  isInCollisionWith(particule: Person): boolean {
+    let deltaX = this.x - particule.x;
+    let deltaY = this.y - particule.y;
 
+    if (Math.abs(deltaX) <= this.infectionRayon && Math.abs(deltaY) <= this.infectionRayon) {
+      return true;
+    }
+
+    return false;
+  }
+
+  isInfected():boolean {
+    if(this.state === 'infected') {
+      return true;
+    }
+    return false;
   }
 
   destroy() {
@@ -117,7 +137,7 @@ export default class Person {
     // infection zone
     this.graphics.lineStyle(1, this.currentColorOfTheTarget)
       .beginFill(0x000000, 0)
-      .drawCircle(this.x, this.y, 12)
+      .drawCircle(this.x, this.y, this.infectionRayon)
       .endFill();
 
     if (this.isShowText) {
