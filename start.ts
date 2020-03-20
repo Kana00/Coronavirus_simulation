@@ -37,7 +37,8 @@ function createPeople(numberOfPeople:number) {
   // random infected
   let randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
   peopleArray[randomSelected].changeInfectionState('infected');
-  peopleArray[randomSelected].setName('First');
+  peopleArray[randomSelected].setName('FIRST');
+  randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
 }
 
 
@@ -49,7 +50,7 @@ app.ticker.add((delta) => {
     particle.update(delta);
 
 
-    particle.draw();
+    particle.draw(delta);
 
 
     peopleArray.forEach((particleToTest, index2) => {

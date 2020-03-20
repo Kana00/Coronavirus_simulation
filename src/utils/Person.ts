@@ -9,14 +9,14 @@ export default class Person {
   immunisedColor = 0x31CC06;
   deadColor = 0xCC00CC;
   speed = 1;
-  infectionRayon = 4;
+  infectionRayon = 8;
   directionAngle = 0;
   isShowText = false;
   graphics = new PIXI.Graphics();
   text = new PIXI.Text('FIRST');
   container: PIXI.Container;
   infectionTime = 12000;
-  chanceOfDeath = 0.001;
+  chanceOfDeath = 0.0002;
 
   constructor(
     private app: PIXI.Application,
@@ -32,7 +32,7 @@ export default class Person {
   }
 
   changeInfectionState(state: stateInfection) {
-    if(this.isDead()) return;
+    if (this.isDead()) return;
     switch (state) {
       case 'normal':
         this.state = 'normal';
@@ -50,13 +50,13 @@ export default class Person {
         this.currentColorOfTheTarget = this.immunisedColor;
 
         // can be dead
-        if(Math.random() < this.chanceOfDeath) { this.changeInfectionState('dead') }
+        if (Math.random() < this.chanceOfDeath) { this.changeInfectionState('dead'); }
         break;
       case 'dead':
         this.state = 'dead';
         this.currentColorOfTheTarget = this.deadColor;
         this.speed = 0;
-      break;
+        break;
       default:
         break;
     }
@@ -126,22 +126,22 @@ export default class Person {
     return false;
   }
 
-  isInfected():boolean {
-    if(this.state === 'infected') {
+  isInfected(): boolean {
+    if (this.state === 'infected') {
       return true;
     }
     return false;
   }
 
-  isImmunised():boolean {
-    if(this.state === 'immunised') {
+  isImmunised(): boolean {
+    if (this.state === 'immunised') {
       return true;
     }
     return false;
   }
 
-  isDead():boolean {
-    if(this.state === 'dead') {
+  isDead(): boolean {
+    if (this.state === 'dead') {
       return true;
     }
     return false;
@@ -156,18 +156,37 @@ export default class Person {
     this.graphics.clear();
   }
 
-  draw() {
+  draw(delta: number) {
+
     // poeple
     this.graphics.lineStyle(0)
       .beginFill(this.currentColorOfTheTarget, 1)
       .drawCircle(this.x, this.y, 2.5)
       .endFill();
 
+
     // infection zone
-    this.graphics.lineStyle(1, this.currentColorOfTheTarget)
-      .beginFill(0x000000, 0)
-      .drawCircle(this.x, this.y, this.infectionRayon)
-      .endFill();
+    if (!this.isDead() && !this.isImmunised()) {
+      if (this.isInfected()) {
+        this.graphics.lineStyle(1, this.currentColorOfTheTarget, 1)
+          .drawCircle(this.x, this.y, this.infectionRayon + 3)
+          .endFill();
+      } else {
+        this.graphics.lineStyle(1, this.currentColorOfTheTarget, 0.3)
+          .drawCircle(this.x, this.y, this.infectionRayon)
+          .endFill();
+      }
+    }
+
+    if (this.isDead()) {
+      this.graphics.lineStyle(2, this.currentColorOfTheTarget)
+        .moveTo(this.x - 10, this.y - 10)
+        .lineTo(this.x + 10, this.y + 10);
+
+      this.graphics.lineStyle(2, this.currentColorOfTheTarget)
+        .moveTo(this.x + 10, this.y - 10)
+        .lineTo(this.x - 10, this.y + 10);
+    }
 
     if (this.isShowText) {
       this.text.x = this.x - 0;
