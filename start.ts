@@ -16,7 +16,7 @@ const app = new PIXI.Application({
 });
 
 app.view.style.marginTop = '2rem';
-app.view.style.borderRadius = '3px';
+app.view.style.borderRadius = '10px';
 
 document.body.appendChild(app.view);
 
@@ -36,9 +36,12 @@ function createPeople(numberOfPeople:number) {
   }
 
   // random infected
-  const randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
+  let randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
   peopleArray[randomSelected].changeInfectionState('infected');
-  peopleArray[randomSelected].isFirst();
+  peopleArray[randomSelected].setName('Macron');
+
+  randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
+  peopleArray[randomSelected].setName('Castaner 👺');
 }
 
 app.stage.addChild(graphics);
@@ -63,13 +66,16 @@ confinementTrackBar.addEventListener('input', (event) => {
 });
 
 peopleTrackBar.addEventListener('change', (event) => {
+  app.stop();
   peopleArray.forEach(element => {
     element.clear();
+    element.destroy();
   });
   createPeople(parseInt(peopleTrackBar.value));
   peopleArray.forEach((particule) => {
     particule.setConfinementRatio(parseInt(confinementTrackBar.value));
   });
+  app.start();
 });
 
 confinementTrackBar.addEventListener('change', (event) => {
