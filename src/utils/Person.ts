@@ -8,12 +8,13 @@ export default class Person {
   infectedColor = 0xFF0606;
   immunisedColor = 0x31CC06;
   speed = 1;
-  infectionRayon = 12;
+  infectionRayon = 4;
   directionAngle = 0;
   isShowText = false;
   graphics = new PIXI.Graphics();
   text = new PIXI.Text('FIRST');
   container: PIXI.Container;
+  infectionTime = 12000;
 
   constructor(
     private app: PIXI.Application,
@@ -37,6 +38,9 @@ export default class Person {
       case 'infected':
         this.state = 'infected';
         this.currentColorOfTheTarget = this.infectedColor;
+        setTimeout(() => {
+          this.changeInfectionState('immunised');
+        }, this.infectionTime);
         break;
       case 'immunised':
         this.state = 'immunised';
@@ -113,6 +117,13 @@ export default class Person {
 
   isInfected():boolean {
     if(this.state === 'infected') {
+      return true;
+    }
+    return false;
+  }
+
+  isImmunised():boolean {
+    if(this.state === 'immunised') {
       return true;
     }
     return false;

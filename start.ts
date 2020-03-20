@@ -18,15 +18,11 @@ const app = new PIXI.Application({
 });
 
 app.view.style.marginTop = '2rem';
-app.view.style.borderRadius = '10px';
 
 document.body.appendChild(app.view);
 
 
 // ------------------------------------------------------------------------------- SIMULATION
-
-const graphics = new PIXI.Graphics();
-
 
 let peopleArray: Array<Person> = new Array();
 const widthFrame = app.renderer.width;
@@ -41,16 +37,10 @@ function createPeople(numberOfPeople:number) {
   // random infected
   let randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
   peopleArray[randomSelected].changeInfectionState('infected');
-  peopleArray[randomSelected].setName('Macron');
-
-  randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
-  peopleArray[randomSelected].setName('Castaner 👺');
-
-  randomSelected = Math.floor(Math.random()*(peopleArray.length-1));
-  peopleArray[randomSelected].setName('Schiappa 👿');
+  peopleArray[randomSelected].setName('First');
 }
 
-app.stage.addChild(graphics);
+
 createPeople(parseInt(peopleTrackBar.value));
 
 app.ticker.add((delta) => {
@@ -66,7 +56,7 @@ app.ticker.add((delta) => {
     peopleArray.forEach((particleToTest, index2) => {
       if(index1 !== index2) {
         if(particle.isInCollisionWith(particleToTest) && index1 !== index2) {
-          if(particle.isInfected()) {
+          if((particle.isInfected() || particleToTest.isInfected()) && !particleToTest.isImmunised() && !particle.isImmunised()) {
             particle.changeInfectionState('infected');
             particleToTest.changeInfectionState('infected');
           }
@@ -104,3 +94,39 @@ confinementTrackBar.addEventListener('change', (event) => {
     particule.setConfinementRatio(parseInt(confinementTrackBar.value));
   });
 });
+
+// ------------------------------------------------------------------------------- GRAPHICS TIME
+
+const graphicInfectionApp = new PIXI.Application({
+  width: 800,
+  height: 100,
+  backgroundColor: 0x111111,
+  antialias: true,
+  resolution: 1,
+});
+
+document.body.appendChild(graphicInfectionApp.view);
+
+const charGraphic = new PIXI.Graphics();
+
+graphicInfectionApp.stage.addChild(charGraphic);
+
+graphicInfectionApp.stage.position.y = graphicInfectionApp.renderer.height / graphicInfectionApp.renderer.resolution
+graphicInfectionApp.stage.scale.y = -1;
+
+let initial = 0.001;
+let lastPointX = 0;
+let lastPointY = 0;
+const timer = setInterval(() => {
+  const numberOfInfected = peopleArray.filter((element) => (element.isInfected()));
+
+  lastPointX = graphicInfectionApp.renderer.width * initial;
+
+  const pixelPerInfected = peopleArray.length / graphicInfectionApp.renderer.height;
+  const infectedPeople = peopleArray.filter((element) => (element.isInfected()));
+
+  charGraphic.lineStyle(1, 0xFF0606)
+  .moveTo(lastPointX, lastPointY)
+  .lineTo(lastPointX, infectedPeople.length * pixelPerInfected);
+  initial += 0.001;
+}, 50);
