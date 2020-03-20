@@ -35,13 +35,20 @@ export default class Person {
     }
   }
 
+  setConfinementRatio(ratio: number) {
+    if(ratio > 100) { ratio = 100 }
+    if(ratio < 0) { ratio = 0 }
+    ratio = 100 - ratio;
+    this.speed = 1 * (ratio/100);
+  }
+
   update(delta:number) {
     const angleRad = this.directionAngle * Math.PI / 180;
-    const xdirection = Math.cos(angleRad);
-    const ydirection = Math.sin(angleRad);
+    const xDirection = Math.cos(angleRad);
+    const yDirection = Math.sin(angleRad);
     const increment = this.speed * delta;
-    this.x = this.x + increment * xdirection;
-    this.y = this.y + increment * ydirection;
+    this.x = this.x + increment * xDirection;
+    this.y = this.y + increment * yDirection;
 
     // detection touching frame
     const left = this.x < 0 && this.y > 0;

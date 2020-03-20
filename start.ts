@@ -54,14 +54,20 @@ peopleTrackBar.addEventListener('input', (event) => {
   peopleLabel.innerText = `(${peopleTrackBar.value}/600) People`;
 });
 
-peopleTrackBar.addEventListener('change', (event) => {
-  graphics.clear();
-  createPeople(parseInt(peopleTrackBar.value));
-});
-
 confinementTrackBar.addEventListener('input', (event) => {
   confinementLabel.innerText = `(${confinementTrackBar.value}%) confinement`;
 });
 
+peopleTrackBar.addEventListener('change', (event) => {
+  graphics.clear();
+  createPeople(parseInt(peopleTrackBar.value));
+  pointArray.forEach((particule) => {
+    particule.setConfinementRatio(parseInt(confinementTrackBar.value));
+  });
+});
+
 confinementTrackBar.addEventListener('change', (event) => {
+  pointArray.forEach((particule) => {
+    particule.setConfinementRatio(parseInt(confinementTrackBar.value));
+  });
 });
