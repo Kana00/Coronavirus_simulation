@@ -1,7 +1,23 @@
 <html>
-  <body>
-    <h1>Coronavirus simulation</h1>
 
-    <script src="./start.ts"></script>
-  </body>
+<head>
+  <title>Simulation Coronavirus</title>
+</head>
+
+<body>
+  <h1>Coronavirus simulation</h1>
+
+  <div class="slidecontainer">
+    <input type="range" name="volume" min="0" max="600" value="10" class="slider" id="people-range">
+    <label for="volume" id="people-label">(0/600) People</label>
+  </div>
+
+  <div class="slidecontainer">
+    <input type="range" name="volume" min="0" max="100" value="0" class="slider" id="confinement-range">
+    <label for="volume" id="confinement-label">(0%) confinement</label>
+  </div>
+
+  <script src="./start.ts"></script>
+</body>
+
 </html>
