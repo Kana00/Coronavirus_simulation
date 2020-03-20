@@ -49,14 +49,17 @@ app.ticker.add((delta) => {
     particle.update(delta);
 
 
-
     particle.draw();
 
 
     peopleArray.forEach((particleToTest, index2) => {
       if(index1 !== index2) {
         if(particle.isInCollisionWith(particleToTest) && index1 !== index2) {
-          if((particle.isInfected() || particleToTest.isInfected()) && !particleToTest.isImmunised() && !particle.isImmunised()) {
+          if((particle.isInfected() || particleToTest.isInfected())
+          && !particleToTest.isImmunised()
+          && !particle.isImmunised()
+          && !particle.isDead()
+          && !particleToTest.isDead()) {
             particle.changeInfectionState('infected');
             particleToTest.changeInfectionState('infected');
           }
@@ -100,7 +103,7 @@ confinementTrackBar.addEventListener('change', (event) => {
 const graphicInfectionApp = new PIXI.Application({
   width: 800,
   height: 100,
-  backgroundColor: 0x111111,
+  backgroundColor: 0xE0E0E0,
   antialias: true,
   resolution: 1,
 });
@@ -130,3 +133,9 @@ const timer = setInterval(() => {
   .lineTo(lastPointX, infectedPeople.length * pixelPerInfected);
   initial += 0.001;
 }, 50);
+
+
+setTimeout(() => {
+  const deadPeople = peopleArray.filter((element) => (element.isDead()));
+  alert(`${(deadPeople.length/peopleArray.length)*100}% of death`);
+}, 1000 * 60);

@@ -1,12 +1,13 @@
 import * as PIXI from 'pixi.js';
 
-type stateInfection = 'normal' | 'infected' | 'immunised';
+type stateInfection = 'normal' | 'infected' | 'immunised' | 'dead';
 
 export default class Person {
   currentColorOfTheTarget = 0xCC06BB;
   normalColor = 0xFFFFFF;
   infectedColor = 0xFF0606;
   immunisedColor = 0x31CC06;
+  deadColor = 0xCC00CC;
   speed = 1;
   infectionRayon = 4;
   directionAngle = 0;
@@ -15,6 +16,7 @@ export default class Person {
   text = new PIXI.Text('FIRST');
   container: PIXI.Container;
   infectionTime = 12000;
+  chanceOfDeath = 0.001;
 
   constructor(
     private app: PIXI.Application,
@@ -30,6 +32,7 @@ export default class Person {
   }
 
   changeInfectionState(state: stateInfection) {
+    if(this.isDead()) return;
     switch (state) {
       case 'normal':
         this.state = 'normal';
@@ -45,7 +48,15 @@ export default class Person {
       case 'immunised':
         this.state = 'immunised';
         this.currentColorOfTheTarget = this.immunisedColor;
+
+        // can be dead
+        if(Math.random() < this.chanceOfDeath) { this.changeInfectionState('dead') }
         break;
+      case 'dead':
+        this.state = 'dead';
+        this.currentColorOfTheTarget = this.deadColor;
+        this.speed = 0;
+      break;
       default:
         break;
     }
@@ -124,6 +135,13 @@ export default class Person {
 
   isImmunised():boolean {
     if(this.state === 'immunised') {
+      return true;
+    }
+    return false;
+  }
+
+  isDead():boolean {
+    if(this.state === 'dead') {
       return true;
     }
     return false;
