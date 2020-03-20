@@ -17,10 +17,12 @@ the advancement of population immunity.
 
 ## Overview
 
-![1](./assets/images/1.png)
-![2](./assets/images/2.png)
-![3](./assets/images/3.png)
-![4](./assets/images/4.png)
+<p style="display:flex; justify-content: center; flex-direction: column;" align="center">
+  <img src="./assets/images/1.png" width="400"/>
+  <img src="./assets/images/2.png" width="400"/>
+  <img src="./assets/images/3.png" width="400"/>
+  <img src="./assets/images/4.png" width="400"/>
+</p>
 
 ## Licence
 
