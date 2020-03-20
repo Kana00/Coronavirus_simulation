@@ -1,8 +1,9 @@
 {
-  "name": "corona_simulation",
+  "name": "coronavirus_simulation",
   "version": "1.0.0",
   "main": "start.ts",
   "license": "MIT",
+  "author": "kana00",
   "scripts": {
     "start": "parcel index.html --open"
   },
