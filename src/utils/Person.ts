@@ -7,7 +7,7 @@ export default class Person {
   normalColor = 0xFFFFFF;
   infectedColor = 0xFF0606;
   immunisedColor = 0x31CC06;
-  speed = 1;
+  speed = 10;
   directionAngle = 0;
   isShowText = false;
   graphics = new PIXI.Graphics();
@@ -92,6 +92,10 @@ export default class Person {
     this.text.style = style;
     this.container.addChild(this.text);
     this.text.text = name;
+  }
+
+  testCollisionWith(child: PIXI.Graphics) {
+
   }
 
   destroy() {
